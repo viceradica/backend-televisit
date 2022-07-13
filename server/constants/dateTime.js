@@ -1,0 +1,7 @@
+const DATE_TIME = {
+  DEFAULT_TIME_FORMAT: 'YYYY-MM-DD HH:mm',
+  DEFAULT_DATE_FORMAT: 'YYYY-MM-DD',
+  CUSTOM_TIME_FORMAT: 'MMMM Do YYYY, h:mm:ss a'
+};
+
+export default DATE_TIME;
