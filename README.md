@@ -14,6 +14,7 @@ It is node js application using express web application framework and MongoDb as
 - docker
 - docker-compose
 
+
 ## Setup
 
 Before starting the application rename the .testEnv file and update the <> placeholders with required data.
