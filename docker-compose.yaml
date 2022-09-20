@@ -2,11 +2,55 @@ version: "3.8"
 
 services:
 
+
+  client:
+    build:
+        context: ./client
+        dockerfile: Dockerfile
+        # args:
+        #     - REACT_APP_BASE_URL: 'http://127.0.0.1:8090'"
+    ports:
+        - "3000:3000"
+    volumes:
+        - ./client/src:/usr/client/app/src
+        - ./client/public:/usr/client/app/public
+    networks:
+        - ag-televisit
+    environment:
+        - "REACT_APP_BASE_URL=http://127.0.0.1:8090"
+        
+    stdin_open: true
+    tty: true
+
   nodejs:
-      build:
-          context: .
-          dockerfile: Dockerfile
-      ports:
-          - "8090:8090"
-      volumes:
-          - '.:/usr/server/app'
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+        - "8090:8090"
+    volumes:
+        - '.:/usr/server/app'
+    networks:
+        - ag-televisit
+  db:
+    image: mongo
+    ports:
+        - 27017:27017
+    container_name: mongo-db
+    networks:
+        - ag-televisit
+    volumes:
+        - mongoDB:/data/db
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: docker
+        MONGO_INITDB_ROOT_PASSWORD: mongopw
+
+
+networks:
+    ag-televisit:
+        driver: bridge
+
+volumes:
+    mongoDB:
+        driver: local
+        

@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
-import crypto from 'crypto';
-import jwt from 'jsonwebtoken';
-import errorMessage from '../constants/errorMessage';
-import auth from '../constants/auth';
+import mongoose from 'mongoose'
+import uniqueValidator from 'mongoose-unique-validator'
+import crypto from 'crypto'
+import jwt from 'jsonwebtoken'
+import errorMessage from '../constants/errorMessage'
+import auth from '../constants/auth'
 
-const { mongooseUniqueError } = errorMessage.MONGOOSE;
+const { mongooseUniqueError } = errorMessage.MONGOOSE
 
 const UserSchema = mongoose.Schema({
   fullName: {
@@ -55,41 +55,41 @@ const UserSchema = mongoose.Schema({
     type: Boolean,
     default: true
   }
-});
+})
 
 const {
   algorithm, iterations, keylength, randomBytesSize, stringFormat
-} = auth.HASH_OPTIONS;
+} = auth.HASH_OPTIONS
 
-UserSchema.pre('save', function() {
+UserSchema.pre('save', function () {
   this.salt = crypto.randomBytes(randomBytesSize)
-    .toString(stringFormat);
+    .toString(stringFormat)
   const hash = crypto.pbkdf2Sync(this.password, this.salt, iterations,
-    keylength, algorithm).toString(stringFormat);
-  this.password = hash;
-});
+    keylength, algorithm).toString(stringFormat)
+  this.password = hash
+})
 
-UserSchema.methods.validatePassword = function(password) {
+UserSchema.methods.validatePassword = function (password) {
   const hash = crypto.pbkdf2Sync(password, this.salt, iterations,
-    keylength, algorithm).toString(stringFormat);
-  return this.password === hash;
-};
+    keylength, algorithm).toString(stringFormat)
+  return this.password === hash
+}
 
-const { duration, options } = auth.JWT;
+const { duration, options } = auth.JWT
 
-UserSchema.methods.toAuthJSON = function() {
+UserSchema.methods.toAuthJSON = function () {
   return {
     _id: this._id,
     username: this.username,
     token: this.generateJWT(),
     role: this.role
-  };
-};
+  }
+}
 
-UserSchema.methods.generateJWT = function() {
-  const today = new Date();
-  const expirationDate = new Date(today);
-  expirationDate.setDate(today.getDate() + duration.numberOfDays);
+UserSchema.methods.generateJWT = function () {
+  const today = new Date()
+  const expirationDate = new Date(today)
+  expirationDate.setDate(today.getDate() + duration.numberOfDays)
 
   return jwt.sign({
     username: this.username,
@@ -99,10 +99,10 @@ UserSchema.methods.generateJWT = function() {
   }, options.secretOrKey, {
     issuer: options.issuer,
     audience: options.audiance
-  });
-};
+  })
+}
 
-UserSchema.plugin(uniqueValidator, mongooseUniqueError);
+UserSchema.plugin(uniqueValidator, mongooseUniqueError)
 
-const User = mongoose.model('Users', UserSchema);
-export default User;
+const User = mongoose.model('Users', UserSchema)
+export default User

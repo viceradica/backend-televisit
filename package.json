@@ -5,11 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:server": "npx nodemon -r esm -r dotenv/config ./server/index.js"
+    "dev:server": "npx nodemon -r esm -r dotenv/config ./server/index.js",
+    "dev:client": "cd client && npm start"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/agilathon/ivan_odak.git"
+    "url": "git+https://github.com/viceradica/backend-televisit.git"
   },
   "author": "odak",
   "license": "ISC",
